@@ -1,0 +1,11 @@
+venv/
+*.pyc
+.idea/
+*~
+/test*.py
+/logs
+/config.py
+/app/static/dist
+node_modules
+npm-debug.log
+webpack.config.js
