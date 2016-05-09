@@ -8,11 +8,15 @@ import auth from './reducers/auth';
 import {NotFound, VerifyEmail} from './components/App';
 import {ProtectedAppRoutes, Login, Register, ForgotPassword} from './containers/App';
 import Home from './components/Home';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
+let muiTheme = getMuiTheme();
 let store = createStore(combineReducers({auth}), applyMiddleware(thunk));
 
 ReactDOM.render(
     <Provider store={store}>
+        <MuiThemeProvider muiTheme={muiTheme}>
         <Router history={browserHistory}>
             <Route path='/'>
                 <Route path="login" component={Login} />
@@ -25,5 +29,6 @@ ReactDOM.render(
                 <Route path="*" component={NotFound} />
             </Route>
         </Router>
+        </MuiThemeProvider>
     </Provider>
 , document.getElementById('reactMain'));

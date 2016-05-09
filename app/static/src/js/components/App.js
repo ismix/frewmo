@@ -1,6 +1,9 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
 import req from 'superagent';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import 'flexboxgrid';
 
 export const NotFound = () => {
     return (<h1>Not found!</h1>);
@@ -71,20 +74,27 @@ export class LoginBox extends Component {
 
     onSubmit = () => {
         this.setState({message: null});
-        var username = this.email.value;
-        var password = this.password.value;
+        var username = this.email.getValue();
+        var password = this.password.getValue();
         this.props.onLogin(username, password, this.updateFormState);
     };
 
     render() {
         return (
-            <div>
-                <label htmlFor="email">Email:</label>
-                <input disabled={this.state.disabled} ref={(node) => {this.email = node}} id="email" type="text" />
-                <label htmlFor="password">Password: </label>
-                <input disabled={this.state.disabled} ref={(node) => {this.password = node}} id="password" type="password" />
-                <button disabled={this.state.disabled} onClick={this.onSubmit}>Login</button>
-                {this.state.message && <NotificationBox message={this.state.message} />}
+            <div className="col-xs-12 center-xs">
+                <div className="row center-xs">
+                    <TextField floatingLabelText='Email' disabled={this.state.disabled} ref={(node) => {this.email = node}} />
+                </div>
+                <div className="row center-xs">
+                    <TextField floatingLabelText='Password' disabled={this.state.disabled} ref={(node) => {this.password = node}} type="password" />
+                </div>
+                <br />
+                <div className="row center-xs">
+                    <RaisedButton label="Login" disabled={this.state.disabled} onClick={this.onSubmit} />
+                </div>
+                <div className="row center-xs">
+                    {this.state.message && <NotificationBox message={this.state.message} />}
+                </div>
             </div>
         );
     }
@@ -124,20 +134,27 @@ export class RegisterBox extends Component {
 
     onSubmit = () => {
         this.setState({message: null});
-        const email = this.email.value;
-        const password = this.password.value;
+        const email = this.email.getValue();
+        const password = this.password.getValue();
         this.props.onRegister({email, password}, this.updateFormState);
     };
 
     render() {
         return (
-            <div>
-                <label htmlFor="email">Email:</label>
-                <input disabled={this.state.disabled} ref={(node) => {this.email = node}} id="email" type="text" />
-                <label htmlFor="password">Password:</label>
-                <input disabled={this.state.disabled} ref={(node) => {this.password = node}} id="password" type="password" />
-                <button disabled={this.state.disabled} onClick={this.onSubmit}>Register</button>
-                {this.state.message && <NotificationBox message={this.state.message} />}
+            <div className="col-xs-12 center-xs">
+                <div className="row center-xs">
+                    <TextField floatingLabelText='Email' disabled={this.state.disabled} ref={(node) => {this.email = node}} />
+                </div>
+                <div className="row center-xs">
+                    <TextField floatingLabelText='Password' disabled={this.state.disabled} ref={(node) => {this.password = node}} type="password" />
+                </div>
+                <br />
+                <div className="row center-xs">
+                    <RaisedButton label="Register" disabled={this.state.disabled} onClick={this.onSubmit} />
+                </div>
+                <div className="row center-xs">
+                    {this.state.message && <NotificationBox message={this.state.message} />}
+                </div>
             </div>
         );
     }
@@ -167,7 +184,7 @@ export class ForgotPasswordBox extends Component {
         this.setState({disabled: true, message: null, submitted: false});
 
         req.get('/api/auth/reset')
-            .query({email: this.email.value})
+            .query({email: this.email.getValue()})
             .end((err,res) => {
                 if (res.body.success) {
                     this.setState({disabled: true, message: res.body.msg, submitted: true});
@@ -182,8 +199,8 @@ export class ForgotPasswordBox extends Component {
 
         req.post('/api/auth/reset')
             .send({
-                password: this.password.value,
-                password2: this.password2.value,
+                password: this.password.getValue(),
+                password2: this.password2.getValue(),
                 token: this.token
             })
             .end((err,res) => {
@@ -198,31 +215,42 @@ export class ForgotPasswordBox extends Component {
     render() {
         if (!this.token){
             return (
-                <div>
+                <div className="col-xs-12 center-xs">
                     {!this.state.submitted && (
                         <div>
-                            <label htmlFor="email">Email: </label>
-                            <input disabled={this.state.disabled} ref={(node) => {this.email = node}} id="email" type="text" />
-                            <button disabled={this.state.disabled} onClick={this.onPasswordResetRequest}>Submit</button>
+                            <div className="row center-xs">
+                                <TextField floatingLabelText='Email' disabled={this.state.disabled} ref={(node) => {this.email = node}} />
+                            </div>
+                            <div className="row center-xs">
+                                <RaisedButton label="Submit" disabled={this.state.disabled} onClick={this.onPasswordResetRequest} />
+                            </div>
                         </div>
                     )}
-                    {this.state.message && <p>{this.state.message}</p>}
+                    <div className="row center-xs">
+                        {this.state.message && <NotificationBox message={this.state.message} />}
+                    </div>
                 </div>
             );
         }
 
         return (
-            <div>
+            <div className="col-xs-12 center-xs">
                 {!this.state.submitted && (
                     <div>
-                        <label htmlFor="password">Password: </label>
-                        <input disabled={this.state.disabled} ref={(node) => {this.password = node}} id="password" type="password" />
-                        <label htmlFor="password2">Repeat Password: </label>
-                        <input disabled={this.state.disabled} ref={(node) => {this.password2 = node}} id="password2" type="password" />
-                        <button disabled={this.state.disabled} onClick={this.onPasswordReset}>Submit</button>
+                        <div className="row center-xs">
+                            <TextField floatingLabelText='Password' disabled={this.state.disabled} ref={(node) => {this.password = node}} type="password" />
+                        </div>
+                        <div className="row center-xs">
+                            <TextField floatingLabelText='Repeat Password' disabled={this.state.disabled} ref={(node) => {this.password2 = node}} type="password" />
+                        </div>
+                        <div className="row center-xs">
+                            <RaisedButton label="Submit" disabled={this.state.disabled} onClick={this.onPasswordReset} />
+                        </div>
                     </div>
                 )}
-                {this.state.message && <NotificationBox message={this.state.message} />}
+                <div className="row center-xs">
+                    {this.state.message && <NotificationBox message={this.state.message} />}
+                </div>
             </div>
         );
     }
@@ -257,6 +285,10 @@ export class VerifyEmail extends Component {
         if (!this.state.valid) {
             return (<NotFound />);
         }
-        return (<p>{this.state.message}</p>);
+        return (
+            <div className="col-xs-12 center-xs">
+                <NotificationBox message="{this.state.message}" />
+            </div>
+        );
     }
 }

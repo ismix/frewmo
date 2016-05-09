@@ -17,11 +17,20 @@ module.exports = {
         filename: "bundle.js",
         publicPath: "http://localhost:3000/static/"
     },
+    resolve: {
+        alias: {
+            flexboxgrid: __dirname + "/node_modules/flexboxgrid/dist/flexboxgrid.min.css"
+        }
+    },
     module: {
         loaders: [{
             test: /\.js?$/,
             loaders: ['react-hot', 'babel'],
             include: PATHS.src
+        },
+        {
+            test: /\.css$/,
+            loader: "style-loader!css-loader"
         }]
     },
     plugins: [
