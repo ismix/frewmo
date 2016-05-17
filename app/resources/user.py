@@ -23,13 +23,17 @@ class EmailVerificationResource(Resource):
 
 class ResetPasswordResource(Resource):
     @use_args({
-        'email': fields.Str(required=True, validate=validate.Email('Invalid data'), location='query'),
+        'email': fields.Str(
+            required=True,
+            validate=validate.Email('Invalid data'),
+            location='query'),
     })
     def get(self, args):
         email = args['email']
         success = User.reset_password(email)
         if success:
-            return resp(True, msg='Please check your email for password reset instructions.')
+            msg = 'Please check your email for password reset instructions.'
+            return resp(True, msg=msg)
 
         return resp(False, msg='No user is associated with this email address.')
 
