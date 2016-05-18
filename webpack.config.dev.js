@@ -23,15 +23,20 @@ module.exports = {
         }
     },
     module: {
-        loaders: [{
-            test: /\.js?$/,
-            loaders: ['react-hot', 'babel'],
-            include: PATHS.src
-        },
-        {
-            test: /\.css$/,
-            loader: "style-loader!css-loader"
-        }]
+        loaders: [
+            {
+                test: /\.js?$/,
+                loaders: ['react-hot', 'babel'],
+                include: PATHS.src
+            },
+            {
+                test: /\.css$/,
+                loaders: ['style', 'css']
+            },
+            {
+                test: /\.sass$/,
+                loaders: ['style', 'css', 'sass']
+            }]
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin()
