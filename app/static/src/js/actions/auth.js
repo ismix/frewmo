@@ -63,7 +63,7 @@ export const authenticatedAction = (params) =>{
         }
 
         const method = params.method?params.method.toLowerCase():'get';
-        var reqBody = req["method"](params.path).set('Authorization', 'Token '+token);
+        var reqBody = req[method](params.path).set('Authorization', 'Token '+token);
 
         if (params.payload) {
             reqBody = reqBody[method==='get'?'query':'send'](params.payload);

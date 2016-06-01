@@ -16,7 +16,7 @@ def generate_access_token(user):
 
 @auth.verify_token
 def verify_access_token(token):
-    token_data = detokenize(token, 'id')
+    token_data = detokenize(token)
 
     if not token_data:
         return False
