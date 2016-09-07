@@ -1,4 +1,5 @@
-import req from 'superagent'
+import Axios from "axios";
+import {setLoadingSpinner, setNotificationMessage} from "./app";
 
 export const ACTION_LOGOUT = 'LOGOUT';
 export const ACTION_AUTH = 'AUTH';
@@ -7,46 +8,70 @@ export const AUTH_STATE_NOT_AUTHENTICATED = 0;
 export const AUTH_STATE_AUTHENTICATED = 1;
 
 
-export const logout = (msg="You have successfully logged out.") => {
+export const logout = (userLoggedOut=true, msg="You have successfully logged out.") => {
     delete localStorage.authToken;
-    return {type: ACTION_LOGOUT, msg: msg};
+    return {type: ACTION_LOGOUT, msg: msg, userLoggedOut};
 };
 
 export const authenticated = (token=null) => {
     return {type: ACTION_AUTH, authState: AUTH_STATE_AUTHENTICATED, token: token};
 };
 
+export const updateUserPassword = (currentPassword, newPassword, newPassword2) => {
+    return authenticatedAction({
+        path: '/api/user/password',
+        method: 'post',
+        payload: {
+            'current_password': currentPassword,
+            'new_password': newPassword,
+            'new_password2': newPassword2
+        },
+        successAction: setNotificationMessage,
+        errorAction: setNotificationMessage
+    });
+};
+
 export const register = (user_data, updateFormState) => {
     return dispatch => {
         updateFormState(true, null);
 
-        req.post('/api/user')
-            .send(user_data)
-            .end(function(err,res) {
-                if (res.body.success) {
-                    localStorage.authToken = res.body.data.token;
-                    dispatch(authenticated(res.body.data.token));
-                } else {
-                    updateFormState(false, res.body.msg);
-                }
-            });
+        Axios('/api/user', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params: user_data
+        }).then((res) => {
+            return res.data;
+        }).then((resBody) => {
+            if (resBody.success) {
+                localStorage.authToken = resBody.data.token;
+                dispatch(authenticated(resBody.data.token));
+            } else {
+                updateFormState(false, resBody.msg);
+            }
+        });
     }
 };
 
 export const login = (username, password, updateFormState) => {
     return dispatch => {
         updateFormState(true, null);
-
-        req.post('/api/auth/login')
-            .set('Authorization', 'Basic '+btoa(username+":"+password))
-            .end((err,res) => {
-                if (res.body.success) {
-                    localStorage.authToken = res.body.data.token;
-                    dispatch(authenticated(res.body.data.token));
-                } else {
-                    updateFormState(false, res.body.msg);
-                }
-            });
+        Axios('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Basic '+btoa(username+":"+password),
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            return res.data;
+        }).then((resBody) => {
+            if (resBody.success) {
+                localStorage.authToken = resBody.data.token;
+                dispatch(authenticated(resBody.data.token));
+            } else {
+                updateFormState(false, resBody.msg);
+            }
+        });
     }
 };
 
@@ -54,34 +79,43 @@ export const authenticatedAction = (params) =>{
     return (dispatch, getState) => {
         const {token} = getState().auth;
         if (!token) {
-            dispatch(logout("Please login to view requested page."));
+            dispatch(logout(false, "Please login to view requested page."));
             return;
         }
+
+        dispatch(setLoadingSpinner());
 
         if (params.startAction) {
             dispatch(params.startAction());
         }
 
         const method = params.method?params.method.toLowerCase():'get';
-        var reqBody = req[method](params.path).set('Authorization', 'Token '+token);
-
-        if (params.payload) {
-            reqBody = reqBody[method==='get'?'query':'send'](params.payload);
-        }
-
-        reqBody.end((err, res) => {
-            if (res.unauthorized) {
-                dispatch(logout("Your session has expired"));
-                return;
+        var requestObj = {
+            'method': method,
+            'headers': {
+                'Authorization': 'Token '+token,
+                'Content-Type': 'application/json'
             }
+        };
 
-            if (res.ok) {
-                if (res.body.success) {
-                    dispatch(params.successAction(res.body.data));
+        requestObj[method=='get'?'params':'data'] = params.payload;
+
+        return Axios(params.path, requestObj).then((res) => {
+            dispatch(setLoadingSpinner(false));
+            return res.data;
+        }).then((resBody) => {
+            if (resBody) {
+                if (resBody.success) {
+                    dispatch(params.successAction(resBody.data));
                 } else {
-                    dispatch(params.errorAction(res.body.msg));
+                    dispatch(params.errorAction(resBody.msg));
                 }
             }
+        }).catch((res) => {
+            if (res.status == 401) {
+                dispatch(logout(false, "Your session has expired"));
+            }
+
         });
     }
 };
