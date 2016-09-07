@@ -1,10 +1,14 @@
+import injectTapEventPlugin from "react-tap-event-plugin";
+injectTapEventPlugin();
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {IndexRoute, Route, Router, browserHistory} from 'react-router';
+import {IndexRoute, Route, Router, useRouterHistory} from 'react-router';
+import {createHistory} from 'history';
 import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import auth from './reducers/auth';
+import app from './reducers/app';
 import {NotFound, VerifyEmail} from './components/App';
 import {ProtectedAppRoutes,
         Login,
@@ -14,14 +18,16 @@ import Home from './components/Home';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import '../css/index.sass';
+import 'flexboxgrid';
 
 let muiTheme = getMuiTheme();
-let store = createStore(combineReducers({auth}), applyMiddleware(thunk));
+let store = createStore(combineReducers({auth, app}), applyMiddleware(thunk));
+const history = useRouterHistory(createHistory)({basename: '/'});
 
 ReactDOM.render(
     <Provider store={store}>
         <MuiThemeProvider muiTheme={muiTheme}>
-        <Router history={browserHistory}>
+        <Router history={history}>
             <Route path='/'>
                 <Route path="login" component={Login} />
                 <Route path="register" component={Register} />
