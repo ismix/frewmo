@@ -40,6 +40,7 @@ class User(AppModel):
     email = Field(str)
     password = Field(bytes)
     email_verification_token = Field(str)
+    failed_login_attempts = Field(int, default=0)
 
     @property
     def fullname(self):
@@ -81,6 +82,19 @@ class User(AppModel):
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
+
+    def change_password(self, current_password, new_password, new_password2):
+        password_valid, error_msg = validate_password(new_password, password2=new_password2)
+
+        if not password_valid:
+            return False, error_msg
+
+        if not self.check_password(current_password):
+            return False, 'Current password you entered does not match with our records.'
+
+        self['password'] = bcrypt.generate_password_hash(new_password)
+        self.save()
+        return True, 'Your password has been updated successfully'
 
     @classmethod
     def reset_password(cls, email):
