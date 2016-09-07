@@ -4,6 +4,7 @@ from app import bcrypt
 from app import auth
 from flask_restful import fields
 from app.utils.misc import detokenize, tokenize
+from app.utils.validators import validate_password
 from app.utils.mailer import send_with_user, SendgridEmailTemplates
 from uuid import uuid4
 import flask
@@ -58,8 +59,10 @@ class User(AppModel):
     def new_user(cls, user_data):
         user_data['email'] = user_data['email'].lower()
 
-        if user_data['password'].strip() != user_data['password']:
-            return False, 'Password can not start or end with a space'
+        password_valid, error_msg = validate_password(user_data['password'])
+
+        if not password_valid:
+            return False, error_msg
 
         if cls.find_by_email(user_data['email']):
             return False, 'A user with this email address already exists'
@@ -121,11 +124,10 @@ class User(AppModel):
         if not (user and user.get('password_reset_token', None) == password_reset_token):
             return False, 'Password reset token is invalid or expired. Please request a new one.'
 
-        if password_data['password'] != password_data['password2']:
-            return False, 'Passwords you have entered do not match'
+        password_valid, error_msg = validate_password(password_data['password'], password2=password_data['password2'])
 
-        if password_data['password'].strip() != password_data['password']:
-            return False, 'Password can not start or end with a space'
+        if not password_valid:
+            return False, error_msg
 
         user['password'] = bcrypt.generate_password_hash(password_data['password'])
         del(user['password_reset_token'])
