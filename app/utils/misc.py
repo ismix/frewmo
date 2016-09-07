@@ -27,8 +27,11 @@ def resp(success, data=None, msg=""):
     if not data:
         data = {}
 
-    for k, v in data.items():
-        data[k] = _resp_helper(v)
+    data_type = type(data)
+
+    if data_type in [list, dict]:
+        for k, v in data.items():
+            data[k] = _resp_helper(v)
 
     return {'success': success, 'data': data, 'msg': msg}
 
