@@ -25,8 +25,8 @@ def main(path=None):
 @parser.error_handler
 def handle_parser_error(error):
     k, v = list(error.messages.items())[0]
-    response = resp(False, msg="%s: %s" % (v[0].capitalize(), k.capitalize()))
-    abort(make_response(jsonify(response), 422))
+    response = resp(False, msg="%s: %s" % (k.capitalize(), v[0].capitalize()))
+    abort(make_response(jsonify(response), 200))
 
 
 @auth.error_handler

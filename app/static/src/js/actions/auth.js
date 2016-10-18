@@ -36,18 +36,18 @@ export const register = (user_data, updateFormState) => {
         updateFormState(true, null);
 
         Axios('/api/user', {
+            method: 'post',
             headers: {
                 'Content-Type': 'application/json'
             },
-            params: user_data
+            data: user_data
         }).then((res) => {
-            return res.data;
-        }).then((resBody) => {
-            if (resBody.success) {
-                localStorage.authToken = resBody.data.token;
-                dispatch(authenticated(resBody.data.token));
+            const {success, data, msg} = res.data;
+            if (success) {
+                localStorage.authToken = data.token;
+                dispatch(authenticated(data.token));
             } else {
-                updateFormState(false, resBody.msg);
+                updateFormState(false, msg);
             }
         });
     }
@@ -57,19 +57,18 @@ export const login = (username, password, updateFormState) => {
     return dispatch => {
         updateFormState(true, null);
         Axios('/api/auth/login', {
-            method: 'POST',
+            method: 'post',
             headers: {
                 'Authorization': 'Basic '+btoa(username+":"+password),
                 'Content-Type': 'application/json'
             }
         }).then((res) => {
-            return res.data;
-        }).then((resBody) => {
-            if (resBody.success) {
-                localStorage.authToken = resBody.data.token;
-                dispatch(authenticated(resBody.data.token));
+            const {success, data, msg} = res.data;
+            if (success) {
+                localStorage.authToken = data.token;
+                dispatch(authenticated(data.token));
             } else {
-                updateFormState(false, resBody.msg);
+                updateFormState(false, msg);
             }
         });
     }
@@ -115,7 +114,6 @@ export const authenticatedAction = (params) =>{
             if (res.status == 401) {
                 dispatch(logout(false, "Your session has expired"));
             }
-
         });
     }
 };

@@ -9,12 +9,12 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import auth from './reducers/auth';
 import app from './reducers/app';
-import {NotFound, VerifyEmail} from './components/App';
-import {ProtectedAppRoutes,
-        Login,
+import {NotFound} from './components/App';
+import {Login,
         Register,
-        ForgotPassword} from './containers/App';
-import Home from './components/Home';
+        ForgotPassword,
+        VerifyEmail} from './containers/App';
+import {HomePage} from './containers/Home';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import '../css/index.sass';
@@ -33,9 +33,7 @@ ReactDOM.render(
                 <Route path="register" component={Register} />
                 <Route path="password-reset" component={ForgotPassword} />
                 <Route path="verify-email" component={VerifyEmail} />
-                <Route component={ProtectedAppRoutes}>
-                    <IndexRoute component={Home} />
-                </Route>
+                <IndexRoute component={HomePage} />
                 <Route path="*" component={NotFound} />
             </Route>
         </Router>

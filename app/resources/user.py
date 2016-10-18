@@ -72,7 +72,7 @@ class EmailVerificationResource(Resource):
     })
     def post(self, args):
         success, msg = User.verify_email(**args)
-        return resp(False, msg=msg)
+        return resp(success, msg=msg)
 
 
 class ResetPasswordResource(Resource):
@@ -90,7 +90,6 @@ class ResetPasswordResource(Resource):
             return resp(True, msg=msg)
 
         return resp(False, msg='No user is associated with this email address.')
-
 
     @use_args({
         'password': fields.Str(required=True, validate=validate.Length(min=8), location='json'),

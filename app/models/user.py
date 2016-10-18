@@ -114,6 +114,10 @@ class User(AppModel):
     @classmethod
     def verify_email(cls, email, token):
         user = cls.find_by_email(email)
+
+        if user and 'email_verification_token' not in user:
+            return False, "Your email is already validated."
+
         if not user or user.get('email_verification_token', None) != token:
             return False, "Sorry, we couldn't verify your email address."
 
