@@ -37,7 +37,7 @@ export class LoginBox extends Component {
         if (!props.authenticated) {
             return;
         }
-        const {state} = this.context.location;
+        const {state} = props.location;
         const nextLoc = (state && state.nextPathname)?state.nextPathname:'/';
         this.context.router.replace({pathname: nextLoc, state: {nextPathname: null}});
     };
@@ -71,8 +71,7 @@ export class LoginBox extends Component {
 }
 
 LoginBox.contextTypes = {
-    router: React.PropTypes.object.isRequired,
-    location: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired
 };
 
 export class RegisterBox extends Component {
@@ -137,8 +136,7 @@ export class RegisterBox extends Component {
 }
 
 RegisterBox.contextTypes = {
-    router: React.PropTypes.object.isRequired,
-    location: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired
 };
 
 
@@ -265,11 +263,10 @@ export class ForgotPasswordBox extends Component {
 }
 
 ForgotPasswordBox.contextTypes = {
-    router: React.PropTypes.object.isRequired,
-    location: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired
 };
 
-export class VerifyEmailBox extends Component {
+class VerifyEmailBox extends Component {
     componentWillMount() {
         const email = this.props.location.query.email;
         const token = this.props.location.query.token;
@@ -301,6 +298,5 @@ export class VerifyEmailBox extends Component {
 }
 
 VerifyEmailBox.contextTypes = {
-    router: React.PropTypes.object.isRequired,
-    location: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired
 };

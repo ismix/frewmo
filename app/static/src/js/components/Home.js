@@ -45,7 +45,7 @@ export const LoadingBox = () => {
     return (
         <div className="loading-box">
             <div className="spinner center-xs">
-                <CircularProgress size={2} />
+                <CircularProgress size={3} />
             </div>
         </div>
     );
