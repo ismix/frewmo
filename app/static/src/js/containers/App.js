@@ -2,7 +2,6 @@ import {connect} from 'react-redux';
 import {LoginBox, RegisterBox, ForgotPasswordBox, VerifyEmailBox} from '../components/App';
 import {login,
     register,
-    logout,
     AUTH_STATE_AUTHENTICATED,
 } from '../actions/auth';
 import {setNotificationMessage} from '../actions/app';

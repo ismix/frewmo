@@ -1,10 +1,10 @@
 from flask import Flask, render_template, make_response, jsonify
 from flask_restful import abort
-from flask.ext.bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt
 import mogo
 from .utils.logger import setup_logger
 from .utils.misc import resp
-from flask.ext.httpauth import HTTPTokenAuth
+from flask_httpauth import HTTPTokenAuth
 from webargs.flaskparser import parser
 
 

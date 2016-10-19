@@ -266,7 +266,7 @@ ForgotPasswordBox.contextTypes = {
     router: React.PropTypes.object.isRequired
 };
 
-class VerifyEmailBox extends Component {
+export class VerifyEmailBox extends Component {
     componentWillMount() {
         const email = this.props.location.query.email;
         const token = this.props.location.query.token;
