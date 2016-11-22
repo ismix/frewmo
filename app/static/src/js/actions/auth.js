@@ -25,9 +25,7 @@ export const updateUserPassword = (currentPassword, newPassword, newPassword2) =
             'current_password': currentPassword,
             'new_password': newPassword,
             'new_password2': newPassword2
-        },
-        successAction: setNotificationMessage,
-        errorAction: setNotificationMessage
+        }
     });
 };
 
@@ -105,14 +103,24 @@ export const authenticatedAction = (params) =>{
         }).then((resBody) => {
             if (resBody) {
                 if (resBody.success) {
-                    dispatch(params.successAction(resBody.data));
-                } else {
-                    dispatch(params.errorAction(resBody.msg));
+                    if (params.successAction) {
+                        dispatch(params.successAction(resBody.data));
+                    }
+                } else if (params.errorAction) {
+                    dispatch(params.errorAction(resBody));
+                }
+
+                if (resBody.msg) {
+                    dispatch(setNotificationMessage(resBody.msg));
                 }
             }
-        }).catch((res) => {
-            if (res.status == 401) {
+        }).catch((error) => {
+            if (error.response && error.response.status == 401) {
                 dispatch(logout(false, "Your session has expired"));
+            } else {
+                dispatch(setNotificationMessage("An error occured, please try again later."));
+                dispatch(setLoadingSpinner(false));
+                throw error;
             }
         });
     }
