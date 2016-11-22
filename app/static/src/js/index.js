@@ -39,4 +39,4 @@ ReactDOM.render(
         </Router>
         </MuiThemeProvider>
     </Provider>
-, document.getElementById('reactMain'));
+, document.getElementById('react-main'));
