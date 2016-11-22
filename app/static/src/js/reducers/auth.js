@@ -1,9 +1,12 @@
 import {ACTION_AUTH,
     ACTION_LOGOUT,
     AUTH_STATE_AUTHENTICATED,
-    AUTH_STATE_NOT_AUTHENTICATED} from '../actions/auth';
+    AUTH_STATE_NOT_AUTHENTICATED,
+    ACTION_USER_FETCHED
+} from '../actions/auth';
 
 const INITIAL_STATE = {
+    user: null,
     token: localStorage.authToken,
     authState: localStorage.authToken?AUTH_STATE_AUTHENTICATED:AUTH_STATE_NOT_AUTHENTICATED,
     error: '',
@@ -23,6 +26,8 @@ export default function auth(state = INITIAL_STATE, action={}) {
             var newState = {...action};
             delete newState.type;
             return newState;
+        case ACTION_USER_FETCHED:
+            return {...state, user: action.user};
         default:
             return state;
   }

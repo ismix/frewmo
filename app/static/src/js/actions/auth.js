@@ -3,10 +3,14 @@ import {setLoadingSpinner, setNotificationMessage} from "./app";
 
 export const ACTION_LOGOUT = 'LOGOUT';
 export const ACTION_AUTH = 'AUTH';
+export const ACTION_USER_FETCHED = 'USER_FETCHED';
 
 export const AUTH_STATE_NOT_AUTHENTICATED = 0;
 export const AUTH_STATE_AUTHENTICATED = 1;
 
+export const userFetched = (userData=null) => {
+    return {type: ACTION_USER_FETCHED, user: userData?userData.user:{}};
+};
 
 export const logout = (userLoggedOut=true, msg="You have successfully logged out.") => {
     delete localStorage.authToken;
@@ -15,6 +19,14 @@ export const logout = (userLoggedOut=true, msg="You have successfully logged out
 
 export const authenticated = (token=null) => {
     return {type: ACTION_AUTH, authState: AUTH_STATE_AUTHENTICATED, token: token};
+};
+
+export const fetchUser = () => {
+    return authenticatedAction({
+        path: "/api/user",
+        successAction: userFetched,
+        errorAction: console.log
+    });
 };
 
 export const updateUserPassword = (currentPassword, newPassword, newPassword2) => {

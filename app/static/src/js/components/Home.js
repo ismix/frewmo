@@ -6,7 +6,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 export class Home extends Component {
     componentWillMount() {
-        this.checkAuthorized(this.props);
+        this.checkAuthorized(this.props, () => {
+            if (!this.props.user) {
+                this.props.loadUser();
+            }
+        });
     }
 
     componentWillReceiveProps(nextProps) {
