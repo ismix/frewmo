@@ -31,7 +31,7 @@ export const updateUserPassword = (currentPassword, newPassword, newPassword2) =
     });
 };
 
-export const register = (user_data, updateFormState) => {
+export const register = (userData, updateFormState) => {
     return dispatch => {
         updateFormState(true, null);
 
@@ -40,7 +40,7 @@ export const register = (user_data, updateFormState) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            data: user_data
+            data: userData
         }).then((res) => {
             const {success, data, msg} = res.data;
             if (success) {
