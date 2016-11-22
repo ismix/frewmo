@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import CircularProgress from 'material-ui/CircularProgress';
 import {Notification} from '../containers/Notification';
 import RaisedButton from 'material-ui/RaisedButton';
+import {LoadingBox} from './App';
 
-
-export class Home extends Component {
+export class LoggedIn extends Component {
     componentWillMount() {
         this.checkAuthorized(this.props, () => {
             if (!this.props.user) {
@@ -41,16 +40,6 @@ export class Home extends Component {
     }
 }
 
-Home.contextTypes = {
+LoggedIn.contextTypes = {
     router: React.PropTypes.object.isRequired
-};
-
-export const LoadingBox = () => {
-    return (
-        <div className="loading-box">
-            <div className="spinner center-xs">
-                <CircularProgress size={3} />
-            </div>
-        </div>
-    );
 };

@@ -1,8 +1,8 @@
 import {connect} from 'react-redux';
-import {Home} from '../components/Home';
+import {LoggedIn} from '../components/LoggedIn';
 import {AUTH_STATE_AUTHENTICATED, logout, fetchUser} from '../actions/auth';
 
-const mapStateToHomeProps = (state) => {
+const mapStateToProps = (state) => {
     return {
         user: state.auth.user,
         loading: state.app.loading,
@@ -11,7 +11,7 @@ const mapStateToHomeProps = (state) => {
     };
 };
 
-const mapDispatchToHomeProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         logout: () => {
             return dispatch(logout());
@@ -22,4 +22,5 @@ const mapDispatchToHomeProps = (dispatch) => {
     };
 };
 
-export const HomePage = connect(mapStateToHomeProps, mapDispatchToHomeProps)(Home);
+const LoggedInWrapper = connect(mapStateToProps, mapDispatchToProps)(LoggedIn);
+export default LoggedInWrapper;

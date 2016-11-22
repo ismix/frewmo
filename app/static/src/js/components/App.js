@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Link} from "react-router";
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import CircularProgress from 'material-ui/CircularProgress';
 import {Notification} from '../containers/Notification';
 import Axios from "axios";
 import 'flexboxgrid';
@@ -299,4 +300,14 @@ export class VerifyEmailBox extends Component {
 
 VerifyEmailBox.contextTypes = {
     router: React.PropTypes.object.isRequired
+};
+
+export const LoadingBox = () => {
+    return (
+        <div className="loading-box">
+            <div className="spinner center-xs">
+                <CircularProgress size={3} />
+            </div>
+        </div>
+    );
 };

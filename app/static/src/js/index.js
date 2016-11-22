@@ -14,7 +14,7 @@ import {Login,
         Register,
         ForgotPassword,
         VerifyEmail} from './containers/App';
-import {HomePage} from './containers/Home';
+import LoggedInWrapper from './containers/LoggedIn';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import '../css/index.sass';
@@ -33,7 +33,7 @@ ReactDOM.render(
                 <Route path="register" component={Register} />
                 <Route path="password-reset" component={ForgotPassword} />
                 <Route path="verify-email" component={VerifyEmail} />
-                <IndexRoute component={HomePage} />
+                <IndexRoute component={LoggedInWrapper} />
                 <Route path="*" component={NotFound} />
             </Route>
         </Router>
