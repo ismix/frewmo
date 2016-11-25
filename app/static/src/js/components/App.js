@@ -15,32 +15,11 @@ export class LoginBox extends Component {
     constructor(props) {
         super(props);
         this.state = {disabled: false};
-
-        if (this.props.message) {
-            this.props.showNotification(this.props.message);
-        }
-    }
-
-    componentWillMount() {
-        this.checkAuthorized(this.props);
-    }
-
-    componentWillUpdate(nextProps) {
-        this.checkAuthorized(nextProps);
     }
 
     updateFormState = (disabled, message) => {
         this.setState({disabled, message});
         this.props.showNotification(message);
-    };
-
-    checkAuthorized = (props) => {
-        if (!props.authenticated) {
-            return;
-        }
-        const {state} = props.location;
-        const nextLoc = (state && state.nextPathname)?state.nextPathname:'/';
-        this.context.router.replace({pathname: nextLoc, state: {nextPathname: null}});
     };
 
     onSubmit = (e) => {
@@ -71,41 +50,15 @@ export class LoginBox extends Component {
     }
 }
 
-LoginBox.contextTypes = {
-    router: React.PropTypes.object.isRequired
-};
-
 export class RegisterBox extends Component {
     constructor(props) {
         super(props);
         this.state = {disabled: false};
-
-        if (this.props.message) {
-            this.props.showNotification(this.props.message);
-        }
-    }
-
-    componentWillMount() {
-        this.checkAuthorized(this.props);
-    }
-
-    componentWillUpdate(nextProps) {
-        this.checkAuthorized(nextProps);
     }
 
     updateFormState = (disabled, message) => {
         this.setState({disabled, message});
         this.props.showNotification(message);
-    };
-
-    checkAuthorized = (props) => {
-        if (!props.authenticated) {
-            return;
-        }
-
-        const {state} = props.location;
-        const nextLoc = (state && state.nextPathname)?state.nextPathname:'/';
-        this.context.router.replace({pathname: nextLoc, state: {nextPathname: null}});
     };
 
     onSubmit = (e) => {
@@ -136,39 +89,19 @@ export class RegisterBox extends Component {
     }
 }
 
-RegisterBox.contextTypes = {
-    router: React.PropTypes.object.isRequired
-};
-
-
 export class ForgotPasswordBox extends Component {
     constructor(props) {
         super(props);
         this.state = {disabled: false, submitted: false};
-
-        if (this.props.message) {
-            this.props.showNotification(this.props.message);
-        }
     }
+
     componentWillMount() {
-        this.checkAuthorized(this.props);
         this.token = this.props.location.query.token;
     }
 
     componentWillUpdate(nextProps) {
-        this.checkAuthorized(nextProps);
         this.token = nextProps.location.query.token;
     }
-
-    checkAuthorized = (props) => {
-        if (!props.authenticated) {
-            return;
-        }
-
-        const {state} = props.location;
-        const nextLoc = (state && state.nextPathname)?state.nextPathname:'/';
-        this.context.router.replace({pathname: nextLoc, state: {nextPathname: null}});
-    };
 
     updateFormState = (disabled, message, submitted) => {
         this.setState({disabled, message, submitted});
@@ -262,10 +195,6 @@ export class ForgotPasswordBox extends Component {
         );
     }
 }
-
-ForgotPasswordBox.contextTypes = {
-    router: React.PropTypes.object.isRequired
-};
 
 export class VerifyEmailBox extends Component {
     componentWillMount() {

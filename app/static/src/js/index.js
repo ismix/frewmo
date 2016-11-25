@@ -15,6 +15,7 @@ import {Login,
         ForgotPassword,
         VerifyEmail} from './containers/App';
 import LoggedInWrapper from './containers/LoggedIn';
+import LoggedOutWrapper from './containers/LoggedOut';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import '../css/index.sass';
@@ -29,10 +30,12 @@ ReactDOM.render(
         <MuiThemeProvider muiTheme={muiTheme}>
         <Router history={history}>
             <Route path='/'>
-                <Route path="login" component={Login} />
-                <Route path="register" component={Register} />
-                <Route path="password-reset" component={ForgotPassword} />
-                <Route path="verify-email" component={VerifyEmail} />
+                <Route component={LoggedOutWrapper}>
+                    <Route path="login" component={Login} />
+                    <Route path="register" component={Register} />
+                    <Route path="password-reset" component={ForgotPassword} />
+                    <Route path="verify-email" component={VerifyEmail} />
+                </Route>
                 <IndexRoute component={LoggedInWrapper} />
                 <Route path="*" component={NotFound} />
             </Route>
